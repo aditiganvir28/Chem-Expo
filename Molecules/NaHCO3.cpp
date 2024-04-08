@@ -1,3 +1,7 @@
+// main.cpp
+// Par Gabriel Le Breton aka GabLeRoux
+// 3 Octobre 2011
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -18,15 +22,32 @@
 /* Global Variables (Configs) */
 // Init options
 
-GLfloat H2O_coords[3][3] = {
-    {0, 0, 0},
-    {-0.61, -0.79, 0},
-    {0.61, -0.79, 0}};
-
-// GLfloat H2O_coords[3][3] = {
+// GLfloat NaHCO3_coords[7][3] = {
 //     {0, 0, 0},
-//     {-1.22, -1.58, 0},
-//     {1.22, -1.58, 0}};
+//     {1, 1, 1},
+//     {1, -1, -1},
+//     {-1, -1, 1},
+//     {-1, 1, -1},
+//     {2, 1, 1},
+//     {2, -1, -1}};
+
+GLfloat NaHCO3_coords[6][3] = {
+    {0, 0, 0},  // Carbon (C)
+    {-1, 1, 0},  // Oxygen (O) near na
+    {1, 1, 0}, // Oxygen (O) near H
+    {0, -1, 0},  // Oxygen (O) double bond
+    {-2, 1, 0},  // Sodium (Na)
+    {2, 1, 0}   // Hydrogen (H)
+};
+
+// GLfloat NaHCO3_coords[7][3] = {
+//     {5.2, 0, 0},
+//     {6.2, 1, 1},
+//     {6.2, -1, -1},
+//     {4.2, -1, 1},
+//     {4.2, 1, -1},
+//     {7.2, 1, 1},
+//     {7.2, -1, -1}};
 
 int selectedObject = 3;
 bool drawThatAxis = 0;
@@ -46,14 +67,15 @@ float downX, downY;
 bool leftButton = false, middleButton = false;
 
 // colors
-GLfloat oxygen[3] = {1, 0.5, 0.0};      // (O - Golden)
+GLfloat oxygen[3] = {1.0, 0.5, 0.0};    // (O - Golden)
 GLfloat nitrogen[3] = {0.0, 0.0, 1.0};  // (N - Blue)
 GLfloat phosphate[3] = {1.0, 0.5, 0.0}; // (P - Orange)
 GLfloat carbon[3] = {0.5, 0.5, 0.5};    // (C - Grey)
 GLfloat sulphur[3] = {1, 0, 0};         //  (S - Red)
-GLfloat hydrogen[3] = {0.0, 0.0, 1};    // (H - Blue)
+GLfloat hydrogen[3] = {0.0, 0.0, 1.0};  // (H - Blue)
 GLfloat white[3] = {1.0, 1.0, 1.0};
 GLfloat black[3] = {1.0, 1.0, 1.0};
+GLfloat sodium[3] = {0.67, 0.34, 0.93}; // RGB color for Sodium
 
 /* Prototypes */
 void liaison(GLfloat color[3], GLfloat height);
@@ -70,24 +92,26 @@ void buildDisplayList();
 void options_menu(int input);
 void initMenu();
 
-void draw_H2O(GLfloat center[3])
+void draw_NaHCO3(GLfloat center[3])
 {
-
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i < 6; i++)
     {
         for (int j = 0; j < 3; j++)
         {
-            H2O_coords[i][j] = center[j] + H2O_coords[i][j];
-            // std::cout << H2O_coords[i][j] << " ";
+            NaHCO3_coords[i][j] = center[j] + NaHCO3_coords[i][j];
         }
-        // std::cout << "\n";
     }
-    for (int i = 0; i < 3; i++)
+
+    for (int i = 0; i < 6; i++)
     {
         glPushMatrix();
-        glTranslatef(H2O_coords[i][0], H2O_coords[i][1], H2O_coords[i][2]);
+        glTranslatef(NaHCO3_coords[i][0], NaHCO3_coords[i][1], NaHCO3_coords[i][2]);
         if (i == 0)
+            atome(carbon);
+        else if (i < 4)
             atome(oxygen);
+        else if (i == 4)
+            atome(sodium);
         else
             atome(hydrogen);
         glPopMatrix();
@@ -96,63 +120,78 @@ void draw_H2O(GLfloat center[3])
     GLUquadric *myQuad;
     myQuad = gluNewQuadric();
 
-    glColor3fv(white);
-    setLightColor(white);
-    renderCylinder(H2O_coords[1][0], H2O_coords[1][1], H2O_coords[1][2],
-                   H2O_coords[0][0], H2O_coords[0][1], H2O_coords[0][2],
+
+        glColor3fv(white);
+        setLightColor(white);
+        
+    renderCylinder(NaHCO3_coords[0][0], NaHCO3_coords[0][1], NaHCO3_coords[0][2],
+                    NaHCO3_coords[2][0], NaHCO3_coords[2][1], NaHCO3_coords[2][2],
+                    cylinderRadius, myQuad);
+    
+    renderCylinder(NaHCO3_coords[1][0], NaHCO3_coords[1][1], NaHCO3_coords[1][2],
+                    NaHCO3_coords[0][0], NaHCO3_coords[0][1], NaHCO3_coords[0][2],
+                    cylinderRadius, myQuad);
+
+    renderCylinder(NaHCO3_coords[0][0], NaHCO3_coords[0][1], NaHCO3_coords[0][2],
+                    NaHCO3_coords[3][0], NaHCO3_coords[3][1], NaHCO3_coords[3][2],
+                    cylinderRadius, myQuad);
+    
+
+    // Draw the bond between Sodium and Oxygen
+    renderCylinder(NaHCO3_coords[4][0], NaHCO3_coords[4][1], NaHCO3_coords[4][2],
+                   NaHCO3_coords[1][0], NaHCO3_coords[1][1], NaHCO3_coords[1][2],
                    cylinderRadius, myQuad);
 
-    glColor3fv(white);
-    setLightColor(white);
-    renderCylinder(H2O_coords[0][0], H2O_coords[0][1], H2O_coords[0][2],
-                   H2O_coords[2][0], H2O_coords[2][1], H2O_coords[2][2],
+    // Draw the bond between Hydrogen and Oxygen
+    renderCylinder(NaHCO3_coords[2][0], NaHCO3_coords[2][1], NaHCO3_coords[2][2],
+                   NaHCO3_coords[5][0], NaHCO3_coords[5][1], NaHCO3_coords[5][2],
                    cylinderRadius, myQuad);
 }
 
-void translate_H2O(char key)
+void translate_NaHCO3(char key)
 {
-    int n = 3;
+    int n = 7;
     GLfloat delta = 0.25;
     if (key == 'w')
     {
         for (int i = 0; i < n; i++)
         {
-            H2O_coords[i][1] += delta;
+            NaHCO3_coords[i][1] += delta;
         }
     }
     else if (key == 'a')
     {
         for (int i = 0; i < n; i++)
         {
-            H2O_coords[i][0] -= delta;
+            NaHCO3_coords[i][0] -= delta;
         }
     }
     else if (key == 's')
     {
         for (int i = 0; i < n; i++)
         {
-            H2O_coords[i][1] -= delta;
+            NaHCO3_coords[i][1] -= delta;
         }
     }
     else if (key == 'd')
     {
         for (int i = 0; i < n; i++)
         {
-            H2O_coords[i][0] += delta;
+            NaHCO3_coords[i][0] += delta;
         }
     }
     else if (key == '8')
     {
         for (int i = 0; i < n; i++)
         {
-            H2O_coords[i][2] += delta;
+            NaHCO3_coords[i][2] += delta;
         }
     }
     else if (key == '5')
     {
         for (int i = 0; i < n; i++)
         {
-            H2O_coords[i][2] -= delta;
+            NaHCO3_coords[i][2] -= delta;
         }
     }
 }
@@ -210,7 +249,7 @@ int main(int argc, char *argv[])
     glutInitWindowSize((int)width, (int)height);
 
     /* create the window and store the handle to it */
-    wd = glutCreateWindow("H2O" /* title */);
+    wd = glutCreateWindow("H2SO4" /* title */);
 
     /* --- register callbacks with GLUT --- */
 
@@ -324,10 +363,10 @@ void renderCylinder(float x1, float y1, float z1, float x2, float y2, float z2, 
 void drawAxis()
 {
 
-    float originAxis[3] = {-2, -2, -2};
-    float xAxis[3] = {-1, -2, -2};
-    float yAxis[3] = {-2, -1, -2};
-    float zAxis[3] = {-2, -2, -1};
+    float originAxis[3] = {0, 0, 0}; // Origine
+    float xAxis[3] = {1, 0, 0};      // L'axe des x
+    float yAxis[3] = {0, 1, 0};      // L'axe des y
+    float zAxis[3] = {0, 0, 1};      // L'axe des z
 
     // Temp: Désactivation de la lumière
     glDisable(GL_LIGHTING);
@@ -385,32 +424,32 @@ void keyboardCallback(unsigned char key, int x, int y)
     if (key == 'a' || key == 'A')
     {
         // cout << "Key pressed: A\n";
-        translate_H2O('a');
+        translate_NaHCO3('a');
     }
     if (key == 'w' || key == 'W')
     {
         // cout << "Key pressed: W\n";
-        translate_H2O('w');
+        translate_NaHCO3('w');
     }
     if (key == 's' || key == 'S')
     {
         // cout << "Key pressed: S\n";
-        translate_H2O('s');
+        translate_NaHCO3('s');
     }
     if (key == 'd' || key == 'D')
     {
         // cout << "Key pressed: D\n";
-        translate_H2O('d');
+        translate_NaHCO3('d');
     }
     if (key == '8')
     {
         // cout << "Key pressed: D\n";
-        translate_H2O('8');
+        translate_NaHCO3('8');
     }
     if (key == '5')
     {
         // cout << "Key pressed: D\n";
-        translate_H2O('5');
+        translate_NaHCO3('5');
     }
     glutPostRedisplay();
 }
@@ -470,6 +509,6 @@ void displayCallback(void)
     }
 
     GLfloat cntr[3] = {0, 0, 0};
-    draw_H2O(cntr);
+    draw_NaHCO3(cntr);
     glFlush();
 }
