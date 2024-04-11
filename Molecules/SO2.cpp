@@ -1,7 +1,3 @@
-// main.cpp
-// Par Gabriel Le Breton aka GabLeRoux
-// 3 Octobre 2011
-
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -16,26 +12,17 @@
 #else
 #include <GL/glut.h>
 #endif
+
 // Windows users, you should try this:
 // #include "glut/glut.h"
 
 /* Global Variables (Configs) */
 // Init options
 
-// GLfloat O2_coords[7][3] = {
-//     {0, 0, 0},
-//     {1, 1, 1},
-//     {1, -1, -1},
-//     {-1, -1, 1},
-//     {-1, 1, -1},
-//     {2, 1, 1},
-//     {2, -1, -1}};
-
-GLfloat O2_coords[2][3] = {
-    {0, 0, 0},  
-    {1.5, 0, 0}
-};
-
+GLfloat SO2_coords[3][3] = {
+    {0, 0, 0},
+    {-1, -0.79, 0},
+    {1, -0.79, 0}};
 
 int selectedObject = 3;
 bool drawThatAxis = 0;
@@ -55,8 +42,9 @@ float downX, downY;
 bool leftButton = false, middleButton = false;
 
 // colors
-GLfloat oxygen[3] = {1.0, 0.0, 0.0};    // (O - Red)
-GLfloat white[3] = {1.0, 1.0, 1.0};
+GLfloat oxygen[3] = {1, 0.0, 0.0};      // (O - Red)
+GLfloat sulphur[3] = {1, 1,0.0};  
+GLfloat white[3] = {1, 1, 1}; // (H - White)    
 
 /* Prototypes */
 void liaison(GLfloat color[3], GLfloat height);
@@ -73,80 +61,90 @@ void buildDisplayList();
 void options_menu(int input);
 void initMenu();
 
-void draw_O2(GLfloat center[3])
+void draw_SO2(GLfloat center[3])
 {
-    for (int i = 0; i < 2; i++)
+
+    for (int i = 0; i < 3; i++)
     {
         for (int j = 0; j < 3; j++)
         {
-            O2_coords[i][j] = center[j] + O2_coords[i][j];
+            SO2_coords[i][j] = center[j] + SO2_coords[i][j];
+            // std::cout << SO2_coords[i][j] << " ";
         }
+        // std::cout << "\n";
     }
 
-    for (int i = 0; i < 2; i++)
+    for (int i = 0; i < 3; i++)
     {
         glPushMatrix();
-        glTranslatef(O2_coords[i][0], O2_coords[i][1], O2_coords[i][2]);
-        atome(oxygen);
+        glTranslatef(SO2_coords[i][0], SO2_coords[i][1], SO2_coords[i][2]);
+        if (i == 0)
+            atome(sulphur);
+        else
+            atome(oxygen);
+        glPopMatrix();
     }
 
     GLUquadric *myQuad;
     myQuad = gluNewQuadric();
 
+    glColor3fv(white);
+    setLightColor(white);
+    renderCylinder(SO2_coords[1][0], SO2_coords[1][1], SO2_coords[1][2],
+                   SO2_coords[0][0], SO2_coords[0][1], SO2_coords[0][2],
+                   cylinderRadius, myQuad);
 
-        glColor3fv(white);
-        setLightColor(white);
-        
-    renderCylinder(O2_coords[0][0] -O2_coords[1][0], O2_coords[0][1] - O2_coords[1][1], O2_coords[0][2] - O2_coords[1][2],
-                    O2_coords[0][0], O2_coords[0][1], O2_coords[0][2],
-                    cylinderRadius, myQuad);
-
+    glColor3fv(white);
+    setLightColor(white);
+    renderCylinder(SO2_coords[0][0], SO2_coords[0][1], SO2_coords[0][2],
+                   SO2_coords[2][0], SO2_coords[2][1], SO2_coords[2][2],
+                   cylinderRadius, myQuad);
 }
 
-void translate_O2(char key)
+void translate_SO2(char key)
 {
-    int n = 7;
+    int n = 3;
     GLfloat delta = 0.25;
     if (key == 'w')
     {
         for (int i = 0; i < n; i++)
         {
-            O2_coords[i][1] += delta;
+            SO2_coords[i][1] += delta;
         }
     }
     else if (key == 'a')
     {
         for (int i = 0; i < n; i++)
         {
-            O2_coords[i][0] -= delta;
+            SO2_coords[i][0] -= delta;
         }
     }
     else if (key == 's')
     {
         for (int i = 0; i < n; i++)
         {
-            O2_coords[i][1] -= delta;
+            SO2_coords[i][1] -= delta;
         }
     }
     else if (key == 'd')
     {
         for (int i = 0; i < n; i++)
         {
-            O2_coords[i][0] += delta;
+            SO2_coords[i][0] += delta;
         }
     }
     else if (key == '8')
     {
         for (int i = 0; i < n; i++)
         {
-            O2_coords[i][2] += delta;
+            SO2_coords[i][2] += delta;
         }
     }
     else if (key == '5')
     {
         for (int i = 0; i < n; i++)
         {
-            O2_coords[i][2] -= delta;
+            SO2_coords[i][2] -= delta;
         }
     }
 }
@@ -204,7 +202,7 @@ int main(int argc, char *argv[])
     glutInitWindowSize((int)width, (int)height);
 
     /* create the window and store the handle to it */
-    wd = glutCreateWindow("H2SO4" /* title */);
+    wd = glutCreateWindow("SO2" /* title */);
 
     /* --- register callbacks with GLUT --- */
 
@@ -318,10 +316,10 @@ void renderCylinder(float x1, float y1, float z1, float x2, float y2, float z2, 
 void drawAxis()
 {
 
-    float originAxis[3] = {0, 0, 0}; // Origine
-    float xAxis[3] = {1, 0, 0};      // L'axe des x
-    float yAxis[3] = {0, 1, 0};      // L'axe des y
-    float zAxis[3] = {0, 0, 1};      // L'axe des z
+    float originAxis[3] = {-2, -2, -2};
+    float xAxis[3] = {-1, -2, -2};
+    float yAxis[3] = {-2, -1, -2};
+    float zAxis[3] = {-2, -2, -1};
 
     // Temp: Désactivation de la lumière
     glDisable(GL_LIGHTING);
@@ -379,32 +377,32 @@ void keyboardCallback(unsigned char key, int x, int y)
     if (key == 'a' || key == 'A')
     {
         // cout << "Key pressed: A\n";
-        translate_O2('a');
+        translate_SO2('a');
     }
     if (key == 'w' || key == 'W')
     {
         // cout << "Key pressed: W\n";
-        translate_O2('w');
+        translate_SO2('w');
     }
     if (key == 's' || key == 'S')
     {
         // cout << "Key pressed: S\n";
-        translate_O2('s');
+        translate_SO2('s');
     }
     if (key == 'd' || key == 'D')
     {
         // cout << "Key pressed: D\n";
-        translate_O2('d');
+        translate_SO2('d');
     }
     if (key == '8')
     {
         // cout << "Key pressed: D\n";
-        translate_O2('8');
+        translate_SO2('8');
     }
     if (key == '5')
     {
         // cout << "Key pressed: D\n";
-        translate_O2('5');
+        translate_SO2('5');
     }
     glutPostRedisplay();
 }
@@ -464,6 +462,6 @@ void displayCallback(void)
     }
 
     GLfloat cntr[3] = {0, 0, 0};
-    draw_O2(cntr);
+    draw_SO2(cntr);
     glFlush();
 }
