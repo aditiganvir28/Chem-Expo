@@ -699,11 +699,12 @@ void translate_xyz(std::string s, GLfloat dx, GLfloat dy, GLfloat dz)
                                             {"Na2CO3", 1},
                                             {"CO2", 2},
                                             {"H2O", 3},
-                                            {"pa", 4},
+                                            {"PA", 4},
                                             {"Product_Na2CO3", 5},
                                             {"Product_CO2", 6},
                                             {"Product_H2O", 7},
-                                            {"NaHCO3_orig", 8}};
+                                            {"NaHCO3_orig", 8},
+                                            {"Arrow", 9}};
     int ind = molecules[s];
 
     switch (ind)
@@ -780,6 +781,7 @@ void translate_xyz(std::string s, GLfloat dx, GLfloat dy, GLfloat dz)
             NaHCO3_orig_coords[i][2] += dz;
         }
         break;
+
     }
 }
 
@@ -1257,63 +1259,81 @@ void keyboardCallback(unsigned char key, int x, int y)
 
     if (key == 'a' || key == 'A')
     {
-        translate_xyz("cyclopentane", -delta, 0, 0);
-        translate_xyz("HBr", -delta, 0, 0);
-        translate_xyz("bromocyclopentane", -delta, 0, 0);
+        translate_xyz("NaHCO3", -delta, 0, 0);
+        translate_xyz("Na2CO3", -delta, 0, 0);
+        translate_xyz("CO2", -delta, 0, 0);
         translate_xyz("PA", -delta, 0, 0);
-        translate_xyz("Product", -delta, 0, 0);
-        translate_xyz("cyclopentane_orig", -delta, 0, 0);
-        translate_xyz("HBr_orig", -delta, 0, 0);
+        translate_xyz("H2O", -delta, 0, 0);
+        translate_xyz("Product_Na2CO3", -delta, 0, 0);
+        translate_xyz("Product_CO2", -delta, 0, 0);
+        translate_xyz("Product_H2O", -delta, 0, 0);
+        translate_xyz("NaHCO3_orig", -delta, 0, 0);
+        translate_xyz("Arrow", -delta, 0, 0);
     }
     if (key == 'w' || key == 'W')
     {
-        translate_xyz("cyclopentane", 0, delta, 0);
-        translate_xyz("HBr", 0, delta, 0);
-        translate_xyz("bromocyclopentane", 0, delta, 0);
+        translate_xyz("NaHCO3", 0, delta, 0);
+        translate_xyz("Na2CO3", 0, delta, 0);
+        translate_xyz("CO2", 0, delta, 0);
         translate_xyz("PA", 0, delta, 0);
-        translate_xyz("Product", 0, delta, 0);
-        translate_xyz("cyclopentane_orig", 0, delta, 0);
-        translate_xyz("HBr_orig", 0, delta, 0);
+        translate_xyz("H2O", 0, delta, 0);
+        translate_xyz("Product_Na2CO3", 0, delta, 0);
+        translate_xyz("Product_CO2", 0, delta, 0);
+        translate_xyz("Product_H2O", 0, delta, 0);
+        translate_xyz("NaHCO3_orig", 0, delta, 0);
+        translate_xyz("Arrow", 0, delta, 0);
     }
     if (key == 's' || key == 'S')
     {
-        translate_xyz("cyclopentane", 0, -delta, 0);
-        translate_xyz("HBr", 0, -delta, 0);
-        translate_xyz("bromocyclopentane", 0, -delta, 0);
+        translate_xyz("NaHCO3", 0, -delta, 0);
+        translate_xyz("Na2CO3", 0, -delta, 0);
+        translate_xyz("CO2", 0, -delta, 0);
         translate_xyz("PA", 0, -delta, 0);
-        translate_xyz("Product", 0, -delta, 0);
-        translate_xyz("cyclopentane_orig", 0, -delta, 0);
-        translate_xyz("HBr_orig", 0, -delta, 0);
+        translate_xyz("H2O", 0, -delta, 0);
+        translate_xyz("Product_Na2CO3", 0, -delta, 0);
+        translate_xyz("Product_CO2", 0, -delta, 0);
+        translate_xyz("Product_H2O", 0 , -delta, 0);
+        translate_xyz("NaHCO3_orig", 0, -delta, 0);
+        translate_xyz("Arrow", 0, -delta, 0);
     }
     if (key == 'd' || key == 'D')
     {
-        translate_xyz("cyclopentane", delta, 0, 0);
-        translate_xyz("HBr", delta, 0, 0);
-        translate_xyz("bromocyclopentane", delta, 0, 0);
+        translate_xyz("NaHCO3", delta, 0, 0);
+        translate_xyz("Na2CO3", delta, 0, 0);
+        translate_xyz("CO2", delta, 0, 0);
         translate_xyz("PA", delta, 0, 0);
-        translate_xyz("Product", delta, 0, 0);
-        translate_xyz("cyclopentane_orig", delta, 0, 0);
-        translate_xyz("HBr_orig", delta, 0, 0);
+        translate_xyz("H2O", delta, 0, 0);
+        translate_xyz("Product_Na2CO3", delta, 0, 0);
+        translate_xyz("Product_CO2", delta, 0, 0);
+        translate_xyz("Product_H2O", delta, 0, 0);
+        translate_xyz("NaHCO3_orig", delta, 0, 0);
+        translate_xyz("Arrow", delta, 0, 0);
     }
     if (key == '8')
     {
-        translate_xyz("cyclopentane", 0, 0, delta);
-        translate_xyz("HBr", 0, 0, delta);
-        translate_xyz("bromocyclopentane", 0, 0, delta);
+        translate_xyz("NaHCO3", 0, 0, delta);
+        translate_xyz("Na2CO3", 0, 0, delta);
+        translate_xyz("CO2", 0, 0, delta);
         translate_xyz("PA", 0, 0, delta);
-        translate_xyz("Product", 0, 0, delta);
-        translate_xyz("cyclopentane_orig", 0, 0, delta);
-        translate_xyz("HBr_orig", 0, 0, delta);
+        translate_xyz("H2O", 0, 0, delta);
+        translate_xyz("Product_Na2CO3", 0, 0, delta);
+        translate_xyz("Product_CO2", 0, 0, delta);
+        translate_xyz("Product_H2O", 0, 0, delta);
+        translate_xyz("NaHCO3_orig", 0, 0, delta);
+        translate_xyz("Arrow", 0, 0, delta);
     }
     if (key == '5')
     {
-        translate_xyz("cyclopentane", 0, 0, -delta);
-        translate_xyz("HBr", 0, 0, -delta);
-        translate_xyz("bromocyclopentane", 0, 0, -delta);
+        translate_xyz("NaHCO3", 0, 0, -delta);
+        translate_xyz("Na2CO3", 0, 0, -delta);
+        translate_xyz("CO2", 0, 0, -delta);
         translate_xyz("PA", 0, 0, -delta);
-        translate_xyz("Product", 0, 0, -delta);
-        translate_xyz("cyclopentane_orig", 0, 0, -delta);
-        translate_xyz("HBr_orig", 0, 0, -delta);
+        translate_xyz("H2O", 0, 0, -delta);
+        translate_xyz("Product_Na2CO3", 0, 0, -delta);
+        translate_xyz("Product_CO2", 0, 0, -delta);
+        translate_xyz("Product_H2O", 0, 0, -delta);
+        translate_xyz("NaHCO3_orig", 0, 0, -delta);
+        translate_xyz("Arrow",  0, 0, -delta);
     }
 
     if (key == 'c' || key == 'C')

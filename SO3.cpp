@@ -1246,13 +1246,17 @@ void displayCallback(void)
         draw_SO2(all_center);
         glPopMatrix();
 
-        if(O2_coords[0][1] > O2_coords[1][1]){
+        if(animation){
+             if(O2_coords[0][1] > O2_coords[1][1]){
             O2_coords[1][1] += 0.01;
         }
         
         if(O2_coords[0][0] < O2_coords[1][0]){
             O2_coords[1][0] -= 0.01;
         }
+        }
+
+       
 
         glPushMatrix();
         glTranslatef((O2_coords[0][0] + O2_coords[1][0]) / 2, (O2_coords[0][1] + O2_coords[1][1]) / 2, (O2_coords[0][2] + O2_coords[1][2]) / 2);
