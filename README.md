@@ -6,7 +6,7 @@
 
 Chem-Expo is a project aimed at demonstrating chemical reactions through fully animated visuals, combining Computer Graphics and Visualization principles. We focused on two well-known reactions: the formation of sulfur trioxide (SO2 + O2 → SO3) and the Decomposition of Sodium Bi Carbonate (NaHCO3 → Na2CO3 + H2O + CO2). 
 
-### Demo Video Link - https://drive.google.com/file/d/1OsBBYy-6fkQGbtQrVuszhREi3YWLnnlO/view?usp=sharing
+### Demo Video Link - https://drive.google.com/file/d/1Ml5rfesHN3dvMTbO3I8aK1YMRx6Omqct/view?usp=sharing
 
 ### Instructions to run
 
